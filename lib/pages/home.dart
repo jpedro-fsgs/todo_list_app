@@ -1,3 +1,4 @@
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:hello_world/models/todo_item.dart';
@@ -6,38 +7,44 @@ import 'package:hello_world/utils/message_item.dart';
 import 'package:hello_world/utils/todo_item_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
-
 }
 
 class _HomePageState extends State<HomePage> {
-
   SharedPreferences? _prefs;
-  String? storedList;
-  late List<TodoItemClass> toDoList;
-
+  List<String>? storedList;
+  List<TodoItemClass> toDoList = [];
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _initPrefs();
   }
 
   void _initPrefs() async {
     _prefs = await SharedPreferences.getInstance();
-    storedList = _prefs?.getString("todoList");
-    toDoList = [];
+    storedList = _prefs?.getStringList("toDoList");
 
+    if (storedList != null) {
+      setState(() {
+        toDoList = storedList!
+            .map((todo) => TodoItemClass.fromJson(jsonDecode(todo)))
+            .toList();
+      });
+    }
   }
-
 
   final _controller = TextEditingController();
 
+  void saveToDoList() {
+    List<String> storeList =
+        toDoList.map((todo) => jsonEncode(todo.toJson())).toList();
+    _prefs?.setStringList("toDoList", storeList);
+  }
 
   void addToDo() {
     if (_controller.text.isEmpty) {
@@ -53,6 +60,7 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       toDoList.removeAt(index);
     });
+    saveToDoList();
   }
 
   void checkBoxChanged(int index, bool? value) {
@@ -66,7 +74,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
         backgroundColor: Colors.pink.shade100,
         appBar: AppBar(
-          title: const Text("Todo List"),
+          title: const Text("ToDo List"),
           centerTitle: true,
           backgroundColor: Colors.pink.shade400,
           foregroundColor: Colors.white,
