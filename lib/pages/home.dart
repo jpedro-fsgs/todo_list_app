@@ -39,6 +39,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   final _controller = TextEditingController();
+  final _scrollController = ScrollController();
 
   void saveToDoList() {
     List<String> storeList =
@@ -53,6 +54,9 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       toDoList.add(TodoItemClass(title: _controller.text));
     });
+    saveToDoList();
+    _scrollController.animateTo(_scrollController.position.extentTotal,
+        duration: Duration(seconds: 2), curve: Curves.fastEaseInToSlowEaseOut);
     _controller.clear();
   }
 
