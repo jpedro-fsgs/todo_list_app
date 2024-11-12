@@ -20,10 +20,10 @@ class TodoItem extends StatelessWidget {
           color: todoItem.isDone ? Colors.pink.shade200 : Colors.pink.shade300,
           borderRadius: BorderRadius.circular(15)),
       margin: const EdgeInsets.only(
-        top: 20,
+        top: 10,
         right: 20,
         left: 20,
-        bottom: 0,
+        bottom: 10,
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(15),

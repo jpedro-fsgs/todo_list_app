@@ -67,6 +67,15 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       toDoList[index].isDone = value ?? true;
     });
+    saveToDoList();
+  }
+
+  void reorderList(oldIndex, newIndex) {
+    setState(() {
+      if (newIndex > oldIndex) newIndex--;
+      final todo = toDoList.removeAt(oldIndex);
+      toDoList.insert(newIndex, todo);
+    });
   }
 
   @override
@@ -81,17 +90,30 @@ class _HomePageState extends State<HomePage> {
         ),
         body: Column(children: [
           Expanded(
-            child: toDoList.isEmpty
-                ? const MessageItem(text: "No Tasks added")
-                : ListView.builder(
-                    itemCount: toDoList.length,
-                    itemBuilder: (BuildContext context, index) {
-                      return TodoItem(
-                          todoItem: toDoList[index],
-                          onChanged: (value) => checkBoxChanged(index, value),
-                          remove: (_) => removeToDo(index));
-                    }),
-          ),
+              child: toDoList.isEmpty
+                  ? const MessageItem(text: "No Tasks added")
+                  : ReorderableListView.builder(
+                      scrollController: _scrollController,
+                      onReorder: reorderList,
+                      itemCount: toDoList.length,
+                      itemBuilder: (BuildContext context, index) {
+                        return TodoItem(
+                            key: ValueKey(toDoList[index].id),
+                            todoItem: toDoList[index],
+                            onChanged: (value) => checkBoxChanged(index, value),
+                            remove: (_) => removeToDo(index));
+                      },
+                      proxyDecorator: (Widget child, int index,
+                          Animation<double> animation) {
+                        return Material(
+                          color: Colors.transparent,
+                          child: Transform.scale(
+                            scale: 1.05,
+                            child: child,
+                          ),
+                        );
+                      },
+                    )),
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: FloatingInput(controller: _controller, onPressed: addToDo),
