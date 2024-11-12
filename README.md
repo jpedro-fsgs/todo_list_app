@@ -1,16 +1,10 @@
-# hello_world
+# Simple To Do List
 
-A new Flutter project.
+First Flutter project.
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Add New Tasks: Easily add tasks.
+- Delete Tasks: Remove completed or unnecessary tasks by sliding to the left.
+- Mark as Completed: Mark tasks as completed.
+- Local Storage: Tasks are saved locally.
